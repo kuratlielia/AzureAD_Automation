@@ -1,10 +1,12 @@
 # Importiere das AzureAD-Modul
 Import-Module AzureAD
 
-# Lade die gespeicherten Anmeldeinformationen
-$credential = Import-Clixml -Path ".\credentials.xml"
+# Lade die Anmeldeinformationen aus den Umgebungsvariablen
+$username = $env:AZURE_AD_USERNAME
+$password = $env:AZURE_AD_PASSWORD | ConvertTo-SecureString -AsPlainText -Force
+$credential = New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList $username, $password
 
-# Authentifizierung bei Azure AD mit den gespeicherten Anmeldeinformationen
+# Authentifiziere bei Azure AD
 Connect-AzureAD -Credential $credential
 
 # Pfad zur CSV-Datei
