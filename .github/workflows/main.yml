@@ -22,3 +22,6 @@ jobs:
       run: |
         pwsh ./benutzerberechtigung.ps1
       shell: powershell
+      env:
+        AZURE_AD_USERNAME: ${{ secrets.AZURE_AD_USERNAME }}
+        AZURE_AD_PASSWORD: ${{ secrets.AZURE_AD_PASSWORD }}
