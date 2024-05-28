@@ -2,13 +2,13 @@
 Import-Module AzureAD
 
 # Lade die gespeicherten Anmeldeinformationen
-$credential = Import-Clixml -Path "C:\temp\credentials.xml"
+$credential = Import-Clixml -Path ".\credentials.xml"
 
 # Authentifizierung bei Azure AD mit den gespeicherten Anmeldeinformationen
 Connect-AzureAD -Credential $credential
 
 # Pfad zur CSV-Datei
-$csvPath = "C:\temp\benutzerberechtigung.csv"
+$csvPath = ".\benutzerberechtigung.csv"
 
 # Lese die CSV-Datei ein
 $users = Import-Csv -Path $csvPath
@@ -22,7 +22,7 @@ foreach ($user in $users) {
     if ($aadUser) {
         # Durchlaufe alle Header in der CSV-Datei
         foreach ($header in $user.PSObject.Properties.Name) {
-            # Überspringe die Spalten für Benutzername und Email
+            # Ãœberspringe die Spalten fÃ¼r Benutzername und Email
             if ($header -eq "Benutzername" -or $header -eq "Email") {
                 continue
             }
@@ -31,12 +31,12 @@ foreach ($user in $users) {
             $group = Get-AzureADGroup -Filter "DisplayName eq '$header'"
 
             if ($group) {
-                # Überprüfe den Wert für die Gruppe
+                # ÃœberprÃ¼fe den Wert fÃ¼r die Gruppe
                 if ($user.$header -eq "True") {
-                    # Füge den Benutzer zur Gruppe hinzu, wenn er nicht bereits Mitglied ist
+                    # FÃ¼ge den Benutzer zur Gruppe hinzu, wenn er nicht bereits Mitglied ist
                     if (-not (Get-AzureADGroupMember -ObjectId $group.ObjectId | Where-Object { $_.ObjectId -eq $aadUser.ObjectId })) {
                         Add-AzureADGroupMember -ObjectId $group.ObjectId -RefObjectId $aadUser.ObjectId
-                        Write-Output "Benutzer $($user.'Email') zur Gruppe $header hinzugefügt."
+                        Write-Output "Benutzer $($user.'Email') zur Gruppe $header hinzugefÃ¼gt."
                     }
                 } elseif ($user.$header -eq "False") {
                     # Entferne den Benutzer aus der Gruppe, wenn er Mitglied ist
