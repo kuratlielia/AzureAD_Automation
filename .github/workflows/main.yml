@@ -13,13 +13,12 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v2
 
-    - name: Setup PowerShell
-      uses: actions/setup-python@v4
-
     - name: Install AzureAD Module
-      run: Install-Module -Name AzureAD -Force -Scope CurrentUser
-      shell: pwsh
+      run: |
+        Install-Module -Name AzureAD -Force -Scope CurrentUser
+      shell: powershell
 
     - name: Run PowerShell script
-      run: pwsh ./benutzerberechtigung.ps1
-      shell: pwsh
+      run: |
+        pwsh ./benutzerberechtigung.ps1
+      shell: powershell
