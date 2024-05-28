@@ -6,21 +6,22 @@ on:
       - main
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
+  run-powershell-script:
+    runs-on: windows-latest
+
     steps:
-    
-    - name: Login via Az module
-      uses: azure/login@v2
-      with:
-        creds: ${{secrets.AZURE_CREDENTIALS}}
-        enable-AzPSSession: true 
-        
-    - name: Run custom PowerShell script
-      uses: azure/powershell@v2
-      with:
-        azPSVersion: "latest"
-        inlineScript: |
-          # Füge hier dein eigenes PowerShell-Skript ein
-          # Beispiel:
-          .\benutzerberechtigung.ps1
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Install AzureAD Module
+      run: |
+        Install-Module -Name AzureAD -Force -Scope CurrentUser
+      shell: powershell
+
+    - name: Run PowerShell script
+      run: |
+        pwsh ./benutzerberechtigung.ps1
+      shell: powershell
+      env:
+        AZURE_AD_USERNAME: ${{ secrets.AZURE_AD_USERNAME }}
+        AZURE_AD_PASSWORD: ${{ secrets.AZURE_AD_PASSWORD }}
