@@ -1,0 +1,25 @@
+name: Azure AD Group Management
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  run-powershell-script:
+    runs-on: windows-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Setup PowerShell
+      uses: actions/setup-powershell@v2
+
+    - name: Install AzureAD Module
+      run: Install-Module -Name AzureAD -Force -Scope CurrentUser
+      shell: pwsh
+
+    - name: Run PowerShell script
+      run: pwsh ./benutzerberechtigung.ps1
+      shell: pwsh
