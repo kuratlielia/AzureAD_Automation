@@ -20,7 +20,7 @@ jobs:
 
     - name: Run PowerShell script
       run: |
-        pwsh ./benutzerberechtigung.ps1
+        ./benutzerberechtigung.ps1
       shell: powershell
       env:
         AZURE_AD_USERNAME: ${{ secrets.AZURE_AD_USERNAME }}
